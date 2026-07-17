@@ -10,10 +10,15 @@ export function HomePage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  
+  const [search, setSearch] = useState('')
+  const [category, setCategory] = useState('All')
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
   useEffect(() => {
     fetchProducts()
-  }, [])
+  }, [search, category, page])
 
   const fetchProducts = async () => {
     try {
@@ -21,11 +26,17 @@ export function HomePage() {
       setError(null)
       console.log('Fetching products...')
 
-      const data = await fetchAPI('/products')
+      const queryParams = new URLSearchParams()
+      if (search) queryParams.append('search', search)
+      if (category && category !== 'All') queryParams.append('category', category)
+      queryParams.append('page', page.toString())
 
-      const mappedData = data.map((p: any) => ({ ...p, id: p._id }))
-      setProducts(mappedData || [])
-      console.log('Products set:', mappedData?.length || 0)
+      const data = await fetchAPI(`/products?${queryParams.toString()}`)
+
+      const mappedData = data.products?.map((p: any) => ({ ...p, id: p._id })) || []
+      setProducts(mappedData)
+      setTotalPages(data.pages || 1)
+      console.log('Products set:', mappedData.length)
     } catch (err) {
       console.error('Error fetching products:', err)
       setError('Failed to fetch products.')
@@ -72,6 +83,26 @@ export function HomePage() {
         >
           <h2 className="text-3xl font-bold mb-8">Featured Products</h2>
 
+          <div className="flex flex-col md:flex-row gap-4 mb-8">
+            <input 
+              type="text" 
+              placeholder="Search products..." 
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:w-1/3"
+            />
+            <select 
+              value={category}
+              onChange={(e) => { setCategory(e.target.value); setPage(1); }}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:w-1/4"
+            >
+              <option value="All">All Categories</option>
+              <option value="General">General</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Accessories">Accessories</option>
+            </select>
+          </div>
+
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
@@ -108,6 +139,25 @@ export function HomePage() {
                 No products available at the moment.
               </p>
             </motion.div>
+          )}
+          {!loading && totalPages > 1 && (
+            <div className="flex justify-center items-center space-x-4 mt-8">
+              <Button 
+                variant="outline" 
+                disabled={page === 1}
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground">Page {page} of {totalPages}</span>
+              <Button 
+                variant="outline" 
+                disabled={page === totalPages}
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              >
+                Next
+              </Button>
+            </div>
           )}
         </motion.div>
       </section>

@@ -40,7 +40,7 @@ export function AdminDashboard() {
         totalUsers: data.stats.totalUsers || 0,
         totalRevenue: data.stats.revenue || 0,
         recentOrders: data.recentOrders || [],
-        lowStockProducts: data.recentProducts.filter((p: any) => p.stock_quantity <= 10) || []
+        lowStockProducts: data.lowStockProducts || []
       })
     } catch (error) {
       console.error('Error fetching dashboard data:', error)
@@ -209,6 +209,12 @@ export function AdminDashboard() {
               <Button variant="outline">
                 <ShoppingCart className="mr-2 h-4 w-4" />
                 View Orders
+              </Button>
+            </Link>
+            <Link to="/admin/users">
+              <Button variant="outline">
+                <Users className="mr-2 h-4 w-4" />
+                Manage Users
               </Button>
             </Link>
           </div>

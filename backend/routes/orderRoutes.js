@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
+import { canTransition } from '../services/orderStateMachine.js';
 
 const router = express.Router();
 
@@ -73,6 +74,27 @@ router.get('/', protect, admin, async (req, res) => {
     try {
         const orders = await Order.find({}).populate('user_id', 'id full_name');
         res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.put('/:id/status', protect, admin, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const order = await Order.findById(req.params.id);
+        
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        if (!canTransition(order.status, status)) {
+            return res.status(400).json({ message: `Invalid transition from ${order.status} to ${status}` });
+        }
+
+        order.status = status;
+        const updatedOrder = await order.save();
+        res.json(updatedOrder);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

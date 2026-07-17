@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { fetchAPI, setAuthToken } from '@/lib/api'
 import { Profile } from '@/types'
+import { useCartStore } from '@/stores/useCartStore'
 
 // Map our custom backend user to the interface
 export interface User {
@@ -58,6 +59,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setUser(userData);
           setProfile(userData as Profile);
           setSession({ access_token: "refreshed" }); 
+          useCartStore.getState().loadFromBackend();
         }
       } catch (error) {
         setSession(null)
@@ -81,6 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const u = { id: data._id, email: data.email, full_name: data.full_name, role: data.role };
       setUser(u);
       setProfile(u as Profile);
+      await useCartStore.getState().syncWithBackend();
       return { error: null }
     } catch (error) {
       return { error: error as Error }
@@ -98,6 +101,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const u = { id: data._id, email: data.email, full_name: data.full_name, role: data.role };
       setUser(u);
       setProfile(u as Profile);
+      await useCartStore.getState().loadFromBackend();
       return { error: null }
     } catch (error) {
       return { error: error as Error }
@@ -111,6 +115,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setSession(null);
       setUser(null);
       setProfile(null);
+      useCartStore.getState().clearCart();
       return { error: null }
     } catch (error) {
       return { error: error as Error }

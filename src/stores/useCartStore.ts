@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { Product, CartItem } from '@/types'
+import { fetchAPI } from '@/lib/api'
 
 interface CartStore {
   items: CartItem[]
@@ -11,6 +12,8 @@ interface CartStore {
   getTotalItems: () => number
   getTotalPrice: () => number
   getCartForCheckout: () => { product_id: string; quantity: number }[]
+  syncWithBackend: () => Promise<void>
+  loadFromBackend: () => Promise<void>
 }
 
 export const useCartStore = create<CartStore>()(
@@ -38,12 +41,14 @@ export const useCartStore = create<CartStore>()(
             }
           }
         })
+        get().syncWithBackend()
       },
       
       removeItem: (productId: string) => {
         set((state) => ({
           items: state.items.filter((item) => item.product.id !== productId),
         }))
+        get().syncWithBackend()
       },
       
       updateQuantity: (productId: string, quantity: number) => {
@@ -59,10 +64,12 @@ export const useCartStore = create<CartStore>()(
               : item
           ),
         }))
+        get().syncWithBackend()
       },
       
       clearCart: () => {
         set({ items: [] })
+        get().syncWithBackend()
       },
       
       getTotalItems: () => {
@@ -82,6 +89,34 @@ export const useCartStore = create<CartStore>()(
           quantity: item.quantity,
         }))
       },
+      
+      syncWithBackend: async () => {
+        try {
+          // If not logged in, fetchAPI will likely fail with 401, we just ignore it
+          // as we want unauthenticated users to use local storage only
+          await fetchAPI('/cart', {
+            method: 'PUT',
+            body: JSON.stringify({ cart_items: get().getCartForCheckout() })
+          })
+        } catch (e) {
+          // Silent fail for guests
+        }
+      },
+
+      loadFromBackend: async () => {
+        try {
+          const data = await fetchAPI('/cart')
+          if (data && data.cart_items) {
+            const mappedItems = data.cart_items.map((ci: any) => ({
+              product: { ...ci.product_id, id: ci.product_id._id },
+              quantity: ci.quantity
+            }))
+            set({ items: mappedItems })
+          }
+        } catch (e) {
+          // Silent fail
+        }
+      }
     }),
     {
       name: 'cart-storage',

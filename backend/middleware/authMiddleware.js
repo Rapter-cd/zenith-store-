@@ -12,6 +12,9 @@ export const protect = async (req, res, next) => {
             if (!req.user) {
                 return res.status(401).json({ message: 'Not authorized, user not found' });
             }
+            if (req.user.isActive === false) {
+                return res.status(403).json({ message: 'Account has been deactivated or banned' });
+            }
             next();
         } catch (error) {
             console.error(error);

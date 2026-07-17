@@ -14,6 +14,7 @@ import { ProfilePage } from '@/pages/ProfilePage'
 import { AdminDashboard } from '@/pages/AdminDashboard'
 import { AdminProducts } from '@/pages/AdminProducts'
 import { AdminOrders } from '@/pages/AdminOrders'
+import { AdminUsers } from '@/pages/AdminUsers'
 
 function App() {
   return (
@@ -63,6 +64,11 @@ function App() {
                 <Route path="/admin/orders" element={
                   <ProtectedRoute adminOnly>
                     <AdminOrders />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/users" element={
+                  <ProtectedRoute adminOnly>
+                    <AdminUsers />
                   </ProtectedRoute>
                 } />
               </Routes>

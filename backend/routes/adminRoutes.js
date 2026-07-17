@@ -17,6 +17,7 @@ router.get('/stats', protect, admin, async (req, res) => {
 
         const recentOrders = await Order.find({}).sort({ createdAt: -1 }).limit(5).populate('user_id', 'full_name');
         const recentProducts = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+        const lowStockProducts = await Product.find({ stock_quantity: { $lt: 5 } }).sort({ stock_quantity: 1 }).limit(10);
 
         res.json({
             stats: {
@@ -26,8 +27,33 @@ router.get('/stats', protect, admin, async (req, res) => {
                 revenue
             },
             recentOrders,
-            recentProducts
+            recentProducts,
+            lowStockProducts
         });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.get('/users', protect, admin, async (req, res) => {
+    try {
+        const users = await User.find({}).select('-password');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+router.put('/users/:id/status', protect, admin, async (req, res) => {
+    try {
+        const { isActive } = req.body;
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        user.isActive = isActive;
+        await user.save();
+        res.json({ message: `User ${isActive ? 'activated' : 'deactivated'}` });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
