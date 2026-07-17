@@ -16,7 +16,7 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'https://zenith-store-eight.vercel.app'],
     credentials: true
 }));
 app.use(cookieParser());
