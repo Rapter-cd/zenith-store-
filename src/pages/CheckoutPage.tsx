@@ -114,13 +114,14 @@ export function CheckoutPage() {
         if (result.paymentDetails) {
           // Payment is successful
           // Now create the actual order in our database
-          const orderResponse = await fetchAPI('/orders', {
-            method: 'POST',
-            body: JSON.stringify({
-              order_items: orderItems,
-              total_price: finalTotal
-            }),
-          })
+            const orderResponse = await fetchAPI('/orders', {
+              method: 'POST',
+              body: JSON.stringify({
+                order_items: orderItems,
+                total_price: finalTotal,
+                cashfreeOrderId: cfResponse.order_id
+              }),
+            })
           
           clearCart()
           navigate(`/order-success/${orderResponse._id}`)

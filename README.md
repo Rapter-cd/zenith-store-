@@ -1,6 +1,6 @@
 # Zenith Store - Complete E-commerce Application
 
-A production-ready, full-stack e-commerce web application built with React, TypeScript, and Supabase.
+A production-ready, full-stack e-commerce web application built with React, TypeScript, Node.js, Express, and MongoDB.
 
 ## 🚀 Features
 
@@ -8,7 +8,7 @@ A production-ready, full-stack e-commerce web application built with React, Type
 - **User Authentication**: Complete sign-up, sign-in, and profile management
 - **Product Catalog**: Browse products with detailed information and images
 - **Shopping Cart**: Add, remove, and manage items with persistent storage
-- **Secure Checkout**: Complete order processing with form validation
+- **Secure Checkout**: Complete order processing with Cashfree Payment Gateway integration
 - **Order History**: View past orders and track status
 - **Responsive Design**: Works seamlessly on all devices
 
@@ -18,12 +18,12 @@ A production-ready, full-stack e-commerce web application built with React, Type
 - **Order Management**: View and update order statuses
 
 ### Technical Features
-- **Modern Stack**: React 18, TypeScript, Vite, Tailwind CSS
+- **Modern Stack**: React 18, TypeScript, Vite, Tailwind CSS, Node.js, Express, MongoDB
 - **State Management**: Zustand for client-side state
 - **Animations**: Framer Motion for smooth transitions
 - **UI Components**: Shadcn/UI for consistent, accessible design
-- **Database**: Supabase with Row Level Security (RLS)
-- **Type Safety**: Full TypeScript implementation
+- **Database**: MongoDB with Mongoose ODM
+- **Type Safety**: Full TypeScript implementation on the frontend
 
 ## 🛠 Tech Stack
 
@@ -32,33 +32,43 @@ A production-ready, full-stack e-commerce web application built with React, Type
 - **State Management**: Zustand
 - **Routing**: React Router DOM
 - **Animations**: Framer Motion
-- **Backend**: Supabase (Database + Auth + Edge Functions)
+- **Backend**: Node.js, Express
+- **Database**: MongoDB
+- **Payments**: Cashfree Payment Gateway
 - **Icons**: Lucide React
 
 ## 🔧 Installation
 
-1. **Install dependencies**
+1. **Install Frontend Dependencies**
    ```bash
    npm install
    ```
 
-2. **Setup Supabase**
-   - Create a new project at [supabase.com](https://supabase.com)
-   - Copy your project URL and anon key
-   - Update `.env` file with your credentials:
+2. **Install Backend Dependencies**
+   ```bash
+   cd backend
+   npm install
+   ```
+
+3. **Environment Setup**
+   - Create a `.env` file in the `backend` directory with your credentials:
      ```env
-     VITE_SUPABASE_URL=your_supabase_project_url
-     VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+     MONGO_URI=your_mongodb_connection_string
+     PORT=5000
+     JWT_SECRET=your_jwt_secret
+     CASHFREE_APP_ID=your_cashfree_app_id
+     CASHFREE_SECRET_KEY=your_cashfree_secret_key
      ```
 
-3. **Setup Database**
-   - Run the SQL schema from `supabase-schema.sql` in your Supabase SQL editor
-   - This will create all tables, RLS policies, and sample data
-
-4. **Start development server**
-   ```bash
-   npm run dev
-   ```
+4. **Start Development Servers**
+   - Start the backend server (from the `backend` directory):
+     ```bash
+     npm run dev
+     ```
+   - Start the frontend server (from the root directory):
+     ```bash
+     npm run dev
+     ```
 
 ## 📱 Pages & Routes
 
@@ -79,41 +89,37 @@ A production-ready, full-stack e-commerce web application built with React, Type
 - `/admin/products` - Product management
 - `/admin/orders` - Order management
 
-## 🗄 Database Schema
-
-### Key Tables
-- **`profiles`**: User information and roles
-- **`products`**: Product catalog with inventory
-- **`orders`**: Customer orders with status tracking
-- **`order_items`**: Individual items within orders
-
 ## 🚀 Deployment
 
-1. Build the project: `npm run build`
-2. Deploy to Vercel/Netlify
-3. Set environment variables in deployment platform
-4. Configure Supabase RLS policies
+1. Build the frontend: `npm run build`
+2. Deploy the frontend to Vercel/Netlify
+3. Deploy the backend to Render/Heroku or any Node.js hosting provider
+4. Set environment variables in your deployment platforms
+5. Ensure your MongoDB cluster allows connections from your backend's IP
 
 ## 📁 Project Structure
 
 ```
 zenith-store/
+├── backend/            # Express Backend
+│   ├── models/         # Mongoose Schemas
+│   ├── routes/         # Express API Routes
+│   ├── controllers/    # API Logic
+│   └── server.js       # Entry point
 ├── src/
 │   ├── components/       # Reusable UI components
-│   ├── contexts/        # React contexts (Auth)
+│   ├── contexts/        # React contexts
 │   ├── lib/            # Utilities and configurations
 │   ├── pages/          # Route components
 │   ├── stores/         # Zustand stores
 │   └── types/          # TypeScript definitions
-├── supabase-schema.sql # Database schema
-└── supabase-edge-function-create-order.ts # Edge function
 ```
 
 ## 🔐 Authentication & Security
 
-- Supabase Auth for user management
-- Row Level Security (RLS) policies
-- Role-based access control
-- Protected routes and API endpoints
+- JWT (JSON Web Tokens) for user authentication and session management
+- Password hashing with bcrypt
+- Protected routes and API endpoints using middleware
+- Role-based access control (Admin vs User)
 
 Built with ❤️ using modern web technologies

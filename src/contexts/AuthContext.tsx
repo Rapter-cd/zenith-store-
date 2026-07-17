@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { fetchAPI } from '@/lib/api'
+import { fetchAPI, setAuthToken } from '@/lib/api'
 import { Profile } from '@/types'
 
 // Map our custom backend user to the interface
@@ -46,11 +46,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem('zenith_token');
-      if (token) {
-        setSession({ access_token: token })
-        try {
-          const profileData = await fetchAPI('/auth/profile');
+      try {
+        const profileData = await fetchAPI('/auth/profile');
+        if (profileData) {
           const userData = {
             id: profileData._id,
             email: profileData.email,
@@ -59,12 +57,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
           };
           setUser(userData);
           setProfile(userData as Profile);
-        } catch (error) {
-          localStorage.removeItem('zenith_token');
-          setSession(null)
-          setUser(null)
-          setProfile(null)
+          setSession({ access_token: "refreshed" }); 
         }
+      } catch (error) {
+        setSession(null)
+        setUser(null)
+        setProfile(null)
       }
       setLoading(false);
     };
@@ -78,7 +76,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         method: 'POST',
         body: JSON.stringify({ email, password, full_name: fullName }),
       })
-      localStorage.setItem('zenith_token', data.token);
+      setAuthToken(data.token);
       setSession({ access_token: data.token })
       const u = { id: data._id, email: data.email, full_name: data.full_name, role: data.role };
       setUser(u);
@@ -95,7 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       })
-      localStorage.setItem('zenith_token', data.token);
+      setAuthToken(data.token);
       setSession({ access_token: data.token })
       const u = { id: data._id, email: data.email, full_name: data.full_name, role: data.role };
       setUser(u);
@@ -108,7 +106,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signOut = async () => {
     try {
-      localStorage.removeItem('zenith_token');
+      await fetchAPI('/auth/logout', { method: 'POST' });
+      setAuthToken(null);
       setSession(null);
       setUser(null);
       setProfile(null);

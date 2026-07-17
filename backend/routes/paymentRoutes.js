@@ -1,7 +1,52 @@
 import express from 'express';
+import crypto from 'crypto';
+import Order from '../models/Order.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+router.post('/webhook', async (req, res) => {
+    try {
+        const signature = req.headers['x-webhook-signature'];
+        const timestamp = req.headers['x-webhook-timestamp'];
+
+        if (!signature || !timestamp) {
+            return res.status(401).send('Missing signature headers');
+        }
+
+        const rawBody = req.body.toString('utf8');
+        const signedString = `${timestamp}${rawBody}`;
+        const expectedSignature = crypto.createHmac('sha256', process.env.CASHFREE_SECRET_KEY)
+            .update(signedString)
+            .digest('base64');
+
+        if (signature !== expectedSignature) {
+            return res.status(401).send('Invalid signature');
+        }
+
+        const payload = JSON.parse(rawBody);
+
+        // Process only payment success (adjust type based on actual Cashfree events)
+        if (payload.type === 'PAYMENT_SUCCESS_WEBHOOK') {
+            const cashfreeOrderId = payload.data.order.order_id;
+            
+            const order = await Order.findOneAndUpdate(
+                { cashfreeOrderId: cashfreeOrderId, webhookProcessed: false },
+                { $set: { webhookProcessed: true, status: 'Paid' } },
+                { new: true }
+            );
+
+            if (!order) {
+                return res.status(200).send('Already processed or not found');
+            }
+        }
+
+        res.status(200).send('Webhook processed');
+    } catch (error) {
+        console.error('Webhook error:', error);
+        res.status(500).send('Webhook error');
+    }
+});
 
 router.post('/create-order', protect, async (req, res) => {
     try {

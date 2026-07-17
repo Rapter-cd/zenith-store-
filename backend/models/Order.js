@@ -10,7 +10,9 @@ const orderSchema = new mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     order_items: [orderItemSchema],
     total_price: { type: Number, required: true },
-    status: { type: String, default: 'Pending', enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'] }
+    status: { type: String, default: 'Pending', enum: ['Pending', 'Paid', 'Shipped', 'Delivered', 'Cancelled'] },
+    cashfreeOrderId: { type: String, unique: true, sparse: true },
+    webhookProcessed: { type: Boolean, default: false }
 }, {
     timestamps: true
 });
