@@ -73,7 +73,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </p>
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-primary">
-                ${product.price.toFixed(2)}
+                ₹{product.price.toLocaleString('en-IN')}
               </span>
               <span className="text-sm text-muted-foreground">
                 {product.stock_quantity} in stock

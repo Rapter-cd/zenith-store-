@@ -83,7 +83,7 @@ export function CartPage() {
                           {item.product.description}
                         </p>
                         <p className="text-lg font-bold text-primary mt-2">
-                          ${item.product.price.toFixed(2)}
+                          ₹{item.product.price.toLocaleString('en-IN')}
                         </p>
                       </div>
                       
@@ -119,7 +119,7 @@ export function CartPage() {
                       
                       <div className="text-right">
                         <p className="font-bold text-lg">
-                          ${(item.product.price * item.quantity).toFixed(2)}
+                          ₹{(item.product.price * item.quantity).toLocaleString('en-IN')}
                         </p>
                         <Button
                           variant="destructive"
@@ -145,20 +145,20 @@ export function CartPage() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>${totalPrice.toFixed(2)}</span>
+                  <span>₹{totalPrice.toLocaleString('en-IN')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping</span>
                   <span>Free</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Tax</span>
-                  <span>${(totalPrice * 0.08).toFixed(2)}</span>
+                  <span>Tax (18% GST)</span>
+                  <span>₹{(totalPrice * 0.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                 </div>
                 <hr />
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span>${(totalPrice * 1.08).toFixed(2)}</span>
+                  <span>₹{(totalPrice * 1.18).toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                 </div>
                 
                 <div className="space-y-2 pt-4">

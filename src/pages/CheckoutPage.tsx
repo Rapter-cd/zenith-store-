@@ -28,7 +28,7 @@ export function CheckoutPage() {
   const [error, setError] = useState('')
 
   const totalPrice = getTotalPrice()
-  const tax = totalPrice * 0.08
+  const tax = totalPrice * 0.18
   const finalTotal = totalPrice + tax
 
   const [shippingInfo, setShippingInfo] = useState({
@@ -237,7 +237,7 @@ export function CheckoutPage() {
                       <span className="flex-1">
                         {item.product.name} × {item.quantity}
                       </span>
-                      <span>${(item.product.price * item.quantity).toFixed(2)}</span>
+                      <span>₹{(item.product.price * item.quantity).toLocaleString('en-IN')}</span>
                     </div>
                   ))}
                 </div>
@@ -248,20 +248,20 @@ export function CheckoutPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>${totalPrice.toFixed(2)}</span>
+                    <span>₹{totalPrice.toLocaleString('en-IN')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
                     <span>Free</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Tax</span>
-                    <span>${tax.toFixed(2)}</span>
+                    <span>Tax (18% GST)</span>
+                    <span>₹{tax.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total</span>
-                    <span>${finalTotal.toFixed(2)}</span>
+                    <span>₹{Math.round(finalTotal).toLocaleString('en-IN')}</span>
                   </div>
                 </div>
 
@@ -271,7 +271,7 @@ export function CheckoutPage() {
                   onClick={handleSubmit}
                   disabled={loading}
                 >
-                  {loading ? 'Starting Payment...' : `Pay via Cashfree - $${finalTotal.toFixed(2)}`}
+                  {loading ? 'Starting Payment...' : `Pay via Cashfree - ₹${Math.round(finalTotal).toLocaleString('en-IN')}`}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
