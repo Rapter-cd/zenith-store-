@@ -10,80 +10,80 @@ connectDB();
 
 const products = [
   {
-    name: "Sony WH-1000XM5 Wireless Headphones",
-    description: "Industry-leading noise cancellation with 30-hour battery life, multipoint Bluetooth connection, and crystal-clear call quality. Foldable design for easy portability.",
+    name: "Wireless Over-Ear Noise-Cancelling Headphones",
+    description: "Premium sound quality with active noise cancellation, 30-hour battery life, and multipoint Bluetooth connection. Foldable design with soft cushioned ear cups for all-day comfort.",
     price: 24999,
     category: "Audio",
     image_url: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80",
     stock_quantity: 30
   },
   {
-    name: "Apple Watch Series 9 (GPS, 45mm)",
-    description: "Advanced health sensors including blood oxygen and ECG, crash detection, always-on Retina display, and up to 18 hours of battery life. Water resistant up to 50 metres.",
+    name: "Smart Fitness Smartwatch (45mm)",
+    description: "Advanced health monitoring with blood oxygen, ECG, crash detection, and always-on display. Up to 18 hours battery life, water resistant up to 50 metres.",
     price: 41900,
     category: "Wearables",
     image_url: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&q=80",
     stock_quantity: 25
   },
   {
-    name: "Keychron K2 Pro Mechanical Keyboard",
-    description: "Compact 75% layout with hot-swappable switches, per-key RGB backlighting, and both wireless and wired connectivity. Compatible with Mac and Windows.",
+    name: "75% Layout Wireless Mechanical Keyboard",
+    description: "Compact hot-swappable mechanical keyboard with per-key RGB backlighting and wireless + wired connectivity. Compatible with Windows and macOS.",
     price: 8999,
     category: "Peripherals",
     image_url: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=800&q=80",
     stock_quantity: 40
   },
   {
-    name: "Dell 27\" QHD IPS Monitor (S2722DC)",
-    description: "2560x1440 QHD resolution, 75Hz refresh rate, USB-C 65W charging, and built-in dual 5W speakers. Thin bezel design with height-adjustable stand for ergonomic use.",
+    name: "27-inch QHD IPS Monitor",
+    description: "2560x1440 QHD resolution, 75Hz refresh rate, USB-C 65W charging, and built-in dual speakers. Thin bezel with height-adjustable ergonomic stand.",
     price: 32500,
     category: "Monitors",
     image_url: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&q=80",
     stock_quantity: 15
   },
   {
-    name: "Logitech MX Master 3S Wireless Mouse",
-    description: "Ultra-fast MagSpeed electromagnetic scrolling, 8K DPI tracking on any surface, ergonomic thumb rest, and up to 70 days on a full charge. Works across 3 devices.",
+    name: "Ergonomic Wireless Productivity Mouse",
+    description: "Ultra-fast electromagnetic scrolling, precise tracking on any surface, comfortable thumb rest, and up to 70 days on a full charge. Pairs with up to 3 devices.",
     price: 9995,
     category: "Peripherals",
     image_url: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800&q=80",
     stock_quantity: 50
   },
   {
-    name: "Samsung Galaxy Buds2 Pro",
-    description: "24-bit Hi-Fi audio, intelligent ANC, 360 Audio, and IPX7 water resistance. Comfortable ergonomic design with up to 8 hours of playback and 29 hours with the case.",
+    name: "True Wireless In-Ear Earbuds",
+    description: "24-bit Hi-Fi audio with intelligent active noise cancellation, IPX7 water resistance, and up to 8 hours playback. Compact charging case provides 29 hours total.",
     price: 14999,
     category: "Audio",
     image_url: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80",
     stock_quantity: 35
   },
   {
-    name: "Anker 65W GaN USB-C Charger",
-    description: "Compact foldable 3-port charger (2x USB-C, 1x USB-A) using GaN technology. Simultaneously charge a laptop, tablet, and smartphone. Universal compatibility.",
+    name: "65W GaN Multi-Port USB-C Charger",
+    description: "Compact foldable 3-port charger (2× USB-C, 1× USB-A) using GaN technology. Simultaneously charges a laptop, tablet, and phone from a single plug.",
     price: 3499,
     category: "Accessories",
     image_url: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&q=80",
     stock_quantity: 80
   },
   {
-    name: "GoPro HERO12 Black Action Camera",
-    description: "5.3K60 video, 27MP photos, HyperSmooth 6.0 stabilization, and up to 70 minutes of underwater shooting at 10m. Includes 1-year GoPro subscription.",
+    name: "4K Action Camera with Stabilisation",
+    description: "5.3K video, 27MP photos, and advanced digital image stabilisation for smooth handheld footage. Waterproof up to 10m without a case. Includes mounting accessories.",
     price: 39500,
     category: "Cameras",
     image_url: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=800&q=80",
     stock_quantity: 18
   },
   {
-    name: "Xiaomi Smart Band 8 Pro",
-    description: "1.74\" AMOLED display, 150+ fitness modes, 14-day battery life, SpO2 and stress monitoring. Swim-proof with 5ATM water resistance.",
+    name: "Smart Health & Fitness Band",
+    description: "1.74-inch AMOLED display, 150+ exercise modes, 14-day battery, SpO2, heart rate, and stress tracking. Swim-proof with 5ATM water resistance.",
     price: 4499,
     category: "Wearables",
     image_url: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=800&q=80",
     stock_quantity: 60
   },
   {
-    name: "TP-Link Deco XE75 Wi-Fi 6E Mesh Router",
-    description: "Tri-band 6GHz Wi-Fi 6E with up to 5400 Mbps speeds. Covers up to 540 sq.m., supports 200+ devices, includes built-in antivirus and parental controls.",
+    name: "Wi-Fi 6E Tri-Band Mesh Router System",
+    description: "Next-gen 6GHz Wi-Fi 6E with up to 5400 Mbps speeds. Covers large homes, supports 200+ devices, with built-in parental controls and network security.",
     price: 18999,
     category: "Networking",
     image_url: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&q=80",

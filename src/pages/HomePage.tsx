@@ -161,38 +161,6 @@ export function HomePage() {
           )}
         </motion.div>
       </section>
-
-      {/* Features Section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8"
-      >
-        <div className="text-center p-6 rounded-lg bg-muted/30">
-          <div className="text-4xl mb-4">🚚</div>
-          <h3 className="text-xl font-semibold mb-2">Free Shipping</h3>
-          <p className="text-muted-foreground">
-            Free shipping on all orders over $50
-          </p>
-        </div>
-
-        <div className="text-center p-6 rounded-lg bg-muted/30">
-          <div className="text-4xl mb-4">🔒</div>
-          <h3 className="text-xl font-semibold mb-2">Secure Payment</h3>
-          <p className="text-muted-foreground">
-            Your payment information is safe with us
-          </p>
-        </div>
-
-        <div className="text-center p-6 rounded-lg bg-muted/30">
-          <div className="text-4xl mb-4">💯</div>
-          <h3 className="text-xl font-semibold mb-2">Quality Guarantee</h3>
-          <p className="text-muted-foreground">
-            30-day money back guarantee on all items
-          </p>
-        </div>
-      </motion.section>
     </div>
   )
 }
